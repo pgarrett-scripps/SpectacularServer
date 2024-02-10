@@ -34,5 +34,5 @@ with my_grid.container():
     card(
       title="Skip Novo",
       text="A Denovo Search Tool",
-      url="http://spectacular.scripps.edu/protein-cleaver-dev"
+      url="http://spectacular.scripps.edu/skip-novo-dev"
     )

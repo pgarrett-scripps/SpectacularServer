@@ -35,6 +35,16 @@ services:
      - BASE_URL=http://spectacular.scripps.edu/spectra-viewer-dev/
     restart: unless-stopped
 
+  skip-novo-streamlit-dev:
+    image: pgarrettscripps/skip-novo-streamlit:dev
+    ports:
+      - "8505:8501"
+    environment:
+      - BASE_URL=http://spectacular.scripps.edu/skip-novo-dev/
+      - SPECTRA_VIEWER_URL=http://spectacular.scripps.edu/spectra-viewer-dev/
+      - COMP_API=http://spectacular.scripps.edu:8001
+    restart: unless-stopped
+
   msms-compression-db:
     image: pgarrettscripps/msms-compression-db
     ports:
@@ -57,6 +67,7 @@ services:
       - peptide-fragmenter-streamlit-dev
       - spectra-viewer-streamlit-dev
       - single-spectrum-denovo-streamlit-dev
+      - skip-novo-streamlit-dev
     restart: unless-stopped
 
 volumes:

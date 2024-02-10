@@ -45,6 +45,12 @@ services:
       - COMP_API=http://spectacular.scripps.edu:8001
     restart: unless-stopped
 
+  spectacular-home:
+    image: pgarrettscripps/spectacular-home
+    ports:
+      - "8506:8501"
+    restart: unless-stopped
+
   msms-compression-db:
     image: pgarrettscripps/msms-compression-db
     ports:

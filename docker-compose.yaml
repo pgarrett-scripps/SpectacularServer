@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  protein-cleaver-streamlit-dev:
+    image: pgarrettscripps/protein-cleaver-streamlit:dev
+    ports:
+      - "8501:8501"
+    environment:
+      - LINK=http://spectacular.scripps.edu/peptide-fragmenter-dev/
+      - BASE_URL=http://spectacular.scripps.edu/protein-cleaver-dev/
+    restart: unless-stopped
+
+  peptide-fragmenter-streamlit-dev:
+    image: pgarrettscripps/peptide-fragmenter-streamlit:dev
+    ports:
+      - "8502:8501"
+    restart: unless-stopped
+    environment:
+      - BASE_URL=http://spectacular.scripps.edu/peptide-fragmenter-dev/
+
+  spectra-viewer-streamlit-dev:
+    image: pgarrettscripps/spectra-viewer-streamlit:dev
+    ports:
+      - "8503:8501"
+    environment:
+      - BASE_URL=http://spectacular.scripps.edu/spectra-viewer-dev/
+      - COMP_API=http://spectacular.scripps.edu:8001
+    restart: unless-stopped
+
+  single-spectrum-denovo-streamlit-dev:
+    image: pgarrettscripps/single-spectrum-denovo-streamlit:dev
+    ports:
+      - "8504:8501"
+    environment:
+     - BASE_URL=http://spectacular.scripps.edu/spectra-viewer-dev/
+    restart: unless-stopped
+
+  msms-compression-db:
+    image: pgarrettscripps/msms-compression-db
+    ports:
+      - "8001:8000"
+    volumes:
+      - type: volume
+        source: fastapi-data
+        target: /usr/src/app/data
+    environment:
+      - DB_FILE_PATH=/usr/src/app/data/spectra.db
+
+  nginx:
+    image: nginx
+    volumes:
+      - /home/pgarrett/nginx_dev_stack.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - protein-cleaver-streamlit-dev
+      - peptide-fragmenter-streamlit-dev
+      - spectra-viewer-streamlit-dev
+      - single-spectrum-denovo-streamlit-dev
+    restart: unless-stopped
+
+volumes:
+  fastapi-data:
